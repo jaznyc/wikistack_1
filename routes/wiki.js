@@ -47,8 +47,9 @@ router.get('/:slug', async (req, res, next) => {
     const foundPage = await Page.findOne({
         where: {slug: req.params.slug}
       })
-      
-    res.send(wikiPage(foundPage))
+      const user = await foundPage.getAuthor()
+      console.log(user)
+    res.send(wikiPage(foundPage, user))
   });
 
 module.exports = router;

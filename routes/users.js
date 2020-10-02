@@ -3,8 +3,7 @@ const router = express.Router();
 const userList = require('../views/userList')
 const { User } = require("../models");
 const { Page } = require("../models");
-const wikiPage = require("../views/wikipage")
-const main = require('../views/main')
+const userPages = require("../views/userPages")
 
 router.get('/', async (req, res) =>{
     const allUsers = await User.findAll()
@@ -13,11 +12,17 @@ router.get('/', async (req, res) =>{
    
 })
 router.get('/:id', async (req, res) =>{
-    const userPages = await Page.findAll({
+    console.log("hit")
+    const userObj = await User.findOne({
+        where: {id: req.params.id}
+    })
+    console.log(userObj)
+    
+    const pages = await Page.findAll({
         where: {authorId: req.params.id}
     })
-    console.log(userPages)
-    res.send(main(userPages))
+    
+    res.send(userPages(userObj, pages))
    
 })
 module.exports = router;
